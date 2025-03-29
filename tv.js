@@ -302,4 +302,130 @@ style.textContent = `
         }
 
         .player {
-            width: 
+            width: 100%;
+            height: auto;
+        }
+
+        .back-button {
+            width: 60px;
+            font-size: 12px;
+            padding: 6px 12px;
+        }
+
+        .bar {
+            font-size: 1.2rem;
+        }
+
+        .switch {
+            width: 40px; /* Smaller switch for mobile view */
+            height: 20px;
+        }
+
+        .switch::before {
+            width: 18px;
+            height: 18px;
+        }
+
+        .emoji {
+            font-size: 18px; /* Smaller emoji for mobile view */
+            margin-left: 5px; /* Adjust margin for better alignment */
+        }
+    }
+`;
+head.appendChild(style);
+
+// Create and append the <body> section
+const body = document.body;
+
+const bar = document.createElement('div');
+bar.className = 'bar';
+bar.textContent = 'TV Channels';
+
+const themeToggle = document.createElement('div');
+themeToggle.className = 'theme-toggle';
+
+const themeSwitch = document.createElement('input');
+themeSwitch.type = 'checkbox';
+themeSwitch.id = 'theme-switch';
+themeSwitch.addEventListener('change', toggleTheme);
+themeToggle.appendChild(themeSwitch);
+
+const themeSwitchLabel = document.createElement('label');
+themeSwitchLabel.className = 'switch';
+themeSwitchLabel.htmlFor = 'theme-switch';
+themeToggle.appendChild(themeSwitchLabel);
+
+const emoji = document.createElement('span');
+emoji.className = 'emoji';
+emoji.textContent = '🌙';
+themeToggle.appendChild(emoji);
+
+bar.appendChild(themeToggle);
+body.appendChild(bar);
+
+const container = document.createElement('div');
+container.className = 'container';
+
+const channelsDiv = document.createElement('div');
+channelsDiv.className = 'channels';
+
+const channels = {
+    "TV Derana": "https://mobond.yuppcdn.net/peotvgo/320/280/content/common/channel/logos/derana.png",
+    "Sirasa TV": "https://mobond.yuppcdn.net/peotvgo/320/280/content/common/channel/logos/ucihva.png",
+    "Hiru TV": "https://mobond.yuppcdn.net/peotvgo/320/280/content/common/channel/logos/hiru-tv.png"
+};
+
+function createChannel(channelKey, channelLogo, channelName) {
+    const channel = document.createElement('div');
+    channel.className = 'channel';
+    channel.setAttribute('data-key', channelKey);
+
+    const img = document.createElement('img');
+    img.src = channelLogo;
+    img.alt = `${channelName} Logo`;
+    channel.appendChild(img);
+
+    const h2 = document.createElement('h2');
+    h2.textContent = channelName;
+    channel.appendChild(h2);
+
+    const button = document.createElement('button');
+    button.className = 'play-button';
+    button.textContent = '▶';
+    button.addEventListener('click', () => playChannel(channelKey));
+    channel.appendChild(button);
+
+    return channel;
+}
+
+channelsDiv.appendChild(createChannel('TV Derana', channels["TV Derana"], 'TV Derana'));
+channelsDiv.appendChild(createChannel('Sirasa TV', channels["Sirasa TV"], 'Sirasa TV'));
+channelsDiv.appendChild(createChannel('Hiru TV', channels["Hiru TV"], 'Hiru TV'));
+
+container.appendChild(channelsDiv);
+body.appendChild(container);
+
+const footer = document.createElement('div');
+footer.className = 'footer';
+
+const footerP = document.createElement('p');
+footerP.innerHTML = '&copy; 2k25 TV Channels. All rights reserved.';
+footer.appendChild(footerP);
+body.appendChild(footer);
+
+function toggleTheme() {
+    const body = document.body;
+    const emoji = document.querySelector('.theme-toggle .emoji');
+    const isLightMode = document.getElementById('theme-switch').checked;
+    if (isLightMode) {
+        body.classList.add('light-mode');
+        emoji.textContent = '☀️';
+    } else {
+        body.classList.remove('light-mode');
+        emoji.textContent = '🌙';
+    }
+}
+
+function playChannel(channelKey) {
+    window.location.href = `player.html?channel=${encodeURIComponent(channelKey)}`;
+}
