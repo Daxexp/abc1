@@ -372,7 +372,27 @@ channelsDiv.className = 'channels';
 const channels = {
     "TV Derana": "https://mobond.yuppcdn.net/peotvgo/320/280/content/common/channel/logos/derana.png",
     "Sirasa TV": "https://mobond.yuppcdn.net/peotvgo/320/280/content/common/channel/logos/ucihva.png",
-    "Hiru TV": "https://mobond.yuppcdn.net/peotvgo/320/280/content/common/channel/logos/hiru-tv.png"
+    "Hiru TV": "https://mobond.yuppcdn.net/peotvgo/320/280/content/common/channel/logos/hiru-tv.png",
+    "Swarnawahini": "https://mobond.yuppcdn.net/peotvgo/320/280/content/common/channel/logos/ddcjju.png",
+    "ITN": "https://mobond.yuppcdn.net/peotvgo/320/280/content/common/channel/logos/ducchq.png",
+    "Star TV": "https://mobond.yuppcdn.net/peotvgo/320/280/content/common/channel/logos/vztqoe.png",
+    "Music TV": "https://mobond.yuppcdn.net/peotvgo/320/280/content/common/channel/logos/music-television.png",
+    "SLT": "https://mobond.yuppcdn.net/peotvgo/320/280/content/common/channel/logos/twkwpt.png",
+    "Pragna TV": "https://mobond.yuppcdn.net/peotvgo/320/280/content/common/channel/logos/pragna-tv.png",
+    "Rupawahini": "https://mobond.yuppcdn.net/peotvgo/320/280/content/common/channel/logos/rupavahini.png",
+    "Shardha TV": "https://mobond.yuppcdn.net/peotvgo/320/280/content/common/channel/logos/mvfdxj.png",
+    "Jaya TV": "https://mobond.yuppcdn.net/peotvgo/320/280/content/common/channel/logos/ppkeyw.png",
+    "Verbum TV": "https://mobond.yuppcdn.net/peotvgo/320/280/content/common/channel/logos/verbum-tv.png",
+    "ChannelEye": "https://mobond.yuppcdn.net/peotvgo/320/280/content/common/channel/logos/fhuhab.png",
+    "AdaDerana24x7": "https://mobond.yuppcdn.net/peotvgo/320/280/content/common/channel/logos/ada-derana-24.png",
+    "TNL": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTdcQj9w0VyOAgD7wwyCze0adezDmRm2F6P0cmX22tNFOvXtO9X5gPJRZQ&usqp=CAE&s",
+    "TV1": "https://mobond.yuppcdn.net/peotvgo/320/280/content/common/channel/logos/vjtiwc.png",
+    "Shakthi TV": "https://mobond.yuppcdn.net/peotvgo/320/280/content/common/channel/logos/dmikwb.png",
+    "Siyatha TV": "https://mobond.yuppcdn.net/peotvgo/320/280/content/common/channel/logos/twchnq.png",
+    "Wasantham TV": "https://mobond.yuppcdn.net/peotvgo/320/280/content/common/channel/logos/ngfsik.png",
+    "Charana TV": "https://mobond.yuppcdn.net/peotvgo/320/280/content/common/channel/logos/djwqoh.png",
+    "Nethra TV": "https://mobond.yuppcdn.net/peotvgo/320/280/content/common/channel/logos/udbacm.png",
+    "Buddhist TV": "https://mobond.yuppcdn.net/peotvgo/320/280/content/common/channel/logos/the-buddhist.png"
 };
 
 function createChannel(channelKey, channelLogo, channelName) {
@@ -401,6 +421,27 @@ function createChannel(channelKey, channelLogo, channelName) {
 channelsDiv.appendChild(createChannel('TV Derana', channels["TV Derana"], 'TV Derana'));
 channelsDiv.appendChild(createChannel('Sirasa TV', channels["Sirasa TV"], 'Sirasa TV'));
 channelsDiv.appendChild(createChannel('Hiru TV', channels["Hiru TV"], 'Hiru TV'));
+channelsDiv.appendChild(createChannel('Swarnawahini', channels["Swarnawahini"], 'Swarnawahini'));
+channelsDiv.appendChild(createChannel('ITN', channels["ITN"], 'ITN'));
+channelsDiv.appendChild(createChannel('Star TV', channels["Star TV"], 'Star TV'));
+channelsDiv.appendChild(createChannel('Music TV', channels["Music TV"], 'Music TV'));
+channelsDiv.appendChild(createChannel('SLT', channels["SLT"], 'SLT'));
+channelsDiv.appendChild(createChannel('Pragna TV', channels["Pragna TV"], 'Pragna TV'));
+channelsDiv.appendChild(createChannel('Rupawahini', channels["Rupawahini"], 'Rupawahini'));
+channelsDiv.appendChild(createChannel('Shardha TV', channels["Shardha TV"], 'Shardha TV'));
+channelsDiv.appendChild(createChannel('Jaya TV', channels["Jaya TV"], 'Jaya TV'));
+channelsDiv.appendChild(createChannel('Verbum TV', channels["Verbum TV"], 'Verbum TV'));
+channelsDiv.appendChild(createChannel('ChannelEye', channels["ChannelEye"], 'ChannelEye'));
+channelsDiv.appendChild(createChannel('AdaDerana24x7', channels["AdaDerana24x7"], 'AdaDerana24x7'));
+channelsDiv.appendChild(createChannel('TNL', channels["TNL"], 'TNL'));
+channelsDiv.appendChild(createChannel('TV1', channels["TV1"], 'TV1'));
+channelsDiv.appendChild(createChannel('Shakthi TV', channels["Shakthi TV"], 'Shakthi TV'));
+channelsDiv.appendChild(createChannel('Siyatha TV', channels["Siyatha TV"], 'Siyatha TV'));
+channelsDiv.appendChild(createChannel('Wasantham TV', channels["Wasantham TV"], 'Wasantham TV'));
+channelsDiv.appendChild(createChannel('Charana TV', channels["Charana TV"], 'Charana TV'));
+channelsDiv.appendChild(createChannel('Nethra TV', channels["Nethra TV"], 'Nethra TV'));
+channelsDiv.appendChild(createChannel('Buddhist TV', channels["Buddhist TV"], 'Buddhist TV'));
+
 
 container.appendChild(channelsDiv);
 body.appendChild(container);
@@ -409,7 +450,7 @@ const footer = document.createElement('div');
 footer.className = 'footer';
 
 const footerP = document.createElement('p');
-footerP.innerHTML = '&copy; 2k25 TV Channels. All rights reserved.';
+footerP.innerHTML = '&copy; 2K25 TV Channels. All rights reserved.';
 footer.appendChild(footerP);
 body.appendChild(footer);
 
