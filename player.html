@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Stream</title>
+    <link href="https://vjs.zencdn.net/7.11.4/video-js.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #121212;
+            color: #ffffff;
+            transition: background-color 0.5s ease, color 0.5s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .channel-name {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        .video-container {
+            width: 90%;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        #videoPlayer {
+            width: 100%;
+            height: 60vh; /* Adjust height to be responsive */
+        }
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: rgba(220, 53, 69, 0.7); /* Transparent red */
+            color: white;
+            padding: 5px 10px; /* Smaller padding */
+            font-size: 0.9rem; /* Smaller font size */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Add shadow */
+        }
+        .back-button:hover {
+            background-color: rgba(200, 35, 51, 0.7);
+        }
+        .theme-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+        .theme-toggle input {
+            display: none;
+        }
+        .switch {
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+            background-color: #ccc;
+            border-radius: 34px;
+            position: relative;
+            transition: background-color 0.3s;
+        }
+        .switch::before {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 30px;
+            height: 30px;
+            background-color: #ffffff;
+            border-radius: 50%;
+            transition: transform 0.3s;
+        }
+        input:checked + .switch {
+            background-color: #4CAF50;
+        }
+        input:checked + .switch::before {
+            transform: translateX(26px);
+        }
+        .emoji {
+            margin-left: 10px;
+            font-size: 24px;
+        }
+        /* Light mode styles */
+        .light-mode {
+            background-color: #f0f0f0 !important;
+            color: #333 !important;
+        }
+        .light-mode .back-button {
+            background-color: rgba(0, 0, 0, 0.7);
+            color: #ffffff;
+        }
+        .light-mode .back-button:hover {
+            background-color: rgba(255, 0, 0, 0.7);
+            color: #ffffff;
+        }
+        .light-mode .theme-toggle .switch {
+            background-color: #ccc;
+        }
+        .light-mode .theme-toggle input:checked + .switch {
+            background-color: #4CAF50;
+        }
+        .light-mode .theme-toggle input:checked + .switch::before {
+            background-color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+    <div class="channel-name" id="channelName"></div>
+    <div class="video-container">
+        <video id="videoPlayer" class="video-js vjs-default-skin" controls preload="auto">
+            <source id="streamSource" type="application/x-mpegURL">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+    <button class="back-button" onclick="window.location.href='index.html'">
+        Go Back
+    </button>
+
+    <div class="theme-toggle">
+        <input type="checkbox" id="theme-switch" onchange="toggleTheme()" />
+        <label class="switch" for="theme-switch"></label>
+        <span class="emoji">🌙</span>
+    </div>
+
+    <script src="https://vjs.zencdn.net/7.11.4/video.min.js"></script>
+    <script>
+        function toggleTheme() {
+            const body = document.body;
+            const emoji = document.querySelector('.theme-toggle .emoji');
+            const isLightMode = document.getElementById('theme-switch').checked;
+            if (isLightMode) {
+                body.classList.add('light-mode');
+                emoji.textContent = '☀️';
+            } else {
+                body.classList.remove('light-mode');
+                emoji.textContent = '🌙';
+            }
+        }
+
+        // Get channel name and stream URL from the URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const channelName = urlParams.get('channel');
+        const streamURL = urlParams.get('stream');
+
+        // Set the channel name and stream URL
+        document.getElementById('channelName').textContent = channelName;
+        document.getElementById('streamSource').src = streamURL;
+
+        // Initialize the video player
+        var player = videojs('videoPlayer');
+        player.ready(function() {
+            player.play(); // Start playback when player is ready
+        });
+
+        // Disable right-click
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+
+        // Disable certain key combinations
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && (e.key === 'u' || e.key === 's' || e.key === 'a' || e.key === 'p') || 
+                e.key === 'F12' || 
+                (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C'))) {
+                e.preventDefault();
+            }
+        });
+    </script>
+    <script src="cmapping.js"></script>
+</body>
+</html>
