@@ -135,6 +135,7 @@
     </div>
 
     <script src="https://vjs.zencdn.net/7.11.4/video.min.js"></script>
+    <script src="channelMapping.js"></script>
     <script>
         function toggleTheme() {
             const body = document.body;
@@ -149,13 +150,16 @@
             }
         }
 
-        // Get channel name and stream URL from the URL parameters
+        // Get channel name and channel identifier from the URL parameters
         const urlParams = new URLSearchParams(window.location.search);
         const channelName = urlParams.get('channel');
-        const streamURL = urlParams.get('stream');
+        const channelId = urlParams.get('id');
 
-        // Set the channel name and stream URL
+        // Set the channel name
         document.getElementById('channelName').textContent = channelName;
+
+        // Resolve the stream URL based on the channel identifier
+        const streamURL = resolveStreamURL(channelId);
         document.getElementById('streamSource').src = streamURL;
 
         // Initialize the video player
@@ -178,6 +182,5 @@
             }
         });
     </script>
-    <script src="cmapping.js"></script>
 </body>
 </html>
