@@ -426,27 +426,35 @@ function toggleTheme() {
     }
 }
 
-function encodeStreamURL(url) {
-    return btoa(url);
+function obfuscateStreamURL(url) {
+    let obfuscated = '';
+    for (let i = 0; i < url.length; i++) {
+        obfuscated += String.fromCharCode(url.charCodeAt(i) + 3);
+    }
+    return obfuscated;
 }
 
-function decodeStreamURL(encodedUrl) {
-    return atob(encodedUrl);
+function deobfuscateStreamURL(obfuscatedUrl) {
+    let url = '';
+    for (let i = 0; i < obfuscatedUrl.length; i++) {
+        url += String.fromCharCode(obfuscatedUrl.charCodeAt(i) - 3);
+    }
+    return url;
 }
 
 function playChannel(channelKey) {
     const channelName = document.querySelector(`.channel[data-key="${channelKey}"] h2`).textContent;
     const streamURL = channels[channelKey];
-    const encodedStreamURL = encodeStreamURL(streamURL);
-    window.location.href = `player.html?channel=${encodeURIComponent(channelName)}&stream=${encodeURIComponent(encodedStreamURL)}`;
+    const obfuscatedStreamURL = obfuscateStreamURL(streamURL);
+    window.location.href = `player.html?channel=${encodeURIComponent(channelName)}&stream=${encodeURIComponent(obfuscatedStreamURL)}`;
 }
 
 // Decode the stream URL when loading the player page
 document.addEventListener('DOMContentLoaded', () => {
     const urlParams = new URLSearchParams(window.location.search);
-    const encodedStreamURL = urlParams.get('stream');
-    if (encodedStreamURL) {
-        const streamURL = decodeStreamURL(encodedStreamURL);
+    const obfuscatedStreamURL = urlParams.get('stream');
+    if (obfuscatedStreamURL) {
+        const streamURL = deobfuscateStreamURL(obfuscatedStreamURL);
         document.getElementById('streamSource').src = streamURL;
     }
 });
