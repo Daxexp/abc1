@@ -455,6 +455,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const obfuscatedStreamURL = urlParams.get('stream');
     if (obfuscatedStreamURL) {
         const streamURL = deobfuscateStreamURL(obfuscatedStreamURL);
+        console.log("Deobfuscated URL: ", streamURL); // Log the deobfuscated URL for debugging
         document.getElementById('streamSource').src = streamURL;
+        document.getElementById('videoPlayer').load(); // Ensure the player reloads the source
     }
 });
