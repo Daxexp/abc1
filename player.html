@@ -149,13 +149,23 @@
             }
         }
 
-        // Get channel name and stream URL from the URL parameters
+        // Get channel name and ID from the URL parameters
         const urlParams = new URLSearchParams(window.location.search);
         const channelName = urlParams.get('channel');
-        const streamURL = urlParams.get('stream');
+        const channelID = urlParams.get('id');
 
-        // Set the channel name and stream URL
+        // Define the stream URLs
+        const channels = {
+            "TV Derana": "https://edge2-moblive.yuppcdn.net/transhd2/smil:detv04.smil/playlist.m3u8?wmsAuthSign=c2VydmVyX3RpbWU9MDMvMTAvMjAyNCAxMToyMzozMCBBTSZoYXNoX3ZhbHVlPXN0aU85Umg2R1ZCMzZ0Y0lkVStmZ0E9PSZ2YWxpZG1pbnV0ZXM9NSZpZD15dXBwdHZvdHRfNV8yMDE3NzBfYTA0NmIxNGUtYzBiNS1mOTAzLTgzZjUtZDE3YzY0MmE1YTFjX0xLXzE3NS4xNTcuMTM2LjkwX3NsdF8xX2NoYW5uZWxfNF8tMSZzdHJtX2xlbj0yNQ==",
+            "Sirasa TV": "https://edge3-moblive.yuppcdn.net/transsd/smil:sirtv09.smil/playlist.m3u8?wmsAuthSign=c2VydmVyX3RpbWU9MDMvMTAvMjAyNCAxMToxMzo1MyBBTSZoYXNoX3ZhbHVlPWxTdVZPMHpONjVtTHkzTS9MWjkvUEE9PSZ2YWxpZG1pbnV0ZXM9NSZpZD15dXBwdHZvdHRfNV8yMDE3NzBfYTA0NmIxNGUtYzBiNS1mOTAzLTgzZjUtZDE3YzY0MmE1YTFjX0xLXzE3NS4xNTcuMTM2LjkwX3NsdF8xX2NoYW5uZWxfOV8tMSZzdHJtX2xlbj0yNQ==",
+            "Hiru TV": "https://edge2-moblive.yuppcdn.net/transhd2/smil:hitv17.smil/playlist.m3u8?wmsAuthSign=c2VydmVyX3RpbWU9MDMvMTAvMjAyNCAxMToxNzo0MiBBTSZoYXNoX3ZhbHVlPWF2aHYvSjRsOWFxYTg0Tkt2RENnM3c9PSZ2YWxpZG1pbnV0ZXM9NSZpZD15dXBwdHZvdHRfNV8yMDE3NzBfYTA0NmIxNGUtYzBiNS1mOTAzLTgzZjUtZDE3YzY0MmE1YTFjX0xLXzE3NS4xNTcuMTM2LjkwX3NsdF8xX2NoYW5uZWxfMTdfLTEmc3RybV9sZW49MjU=",
+        };
+
+        // Set the channel name
         document.getElementById('channelName').textContent = channelName;
+
+        // Set the stream URL based on the channel ID
+        const streamURL = channels[channelID];
         document.getElementById('streamSource').src = streamURL;
 
         // Initialize the video player
