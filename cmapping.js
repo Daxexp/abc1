@@ -1,10 +1,12 @@
 function getLocation() {
+    const statusElement = document.getElementById("status");
+
     if (!navigator.geolocation) {
-        document.getElementById("status").innerText = "Geolocation is not supported by your browser.";
+        statusElement.innerText = "Geolocation is not supported by your browser.";
         return;
     }
 
-    document.getElementById("status").innerText = "Getting location...";
+    statusElement.innerText = "Getting location...";
 
     navigator.geolocation.getCurrentPosition(showPosition, showError);
 }
@@ -13,45 +15,61 @@ function showPosition(position) {
     const lat = position.coords.latitude;
     const lon = position.coords.longitude;
 
-    // Use Google Maps Geocoding API for accurate location name
-    fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lon}&key=YOUR_GOOGLE_MAPS_API_KEY`)
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === "OK") {
-                const locationName = data.results[0].formatted_address;
-                document.getElementById("status").innerText = `📍 You are at: ${locationName}`;
-            } else {
-                document.getElementById("status").innerText = `Latitude: ${lat}, Longitude: ${lon}`;
-            }
-
-            // Display OpenStreetMap
-            const map = L.map('map').setView([lat, lon], 13);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; OpenStreetMap contributors'
-            }).addTo(map);
-
-            L.marker([lat, lon]).addTo(map)
-                .bindPopup(`📍 You are here!`)
-                .openPopup();
+    fetchLocationName(lat, lon)
+        .then(locationName => {
+            updateStatus(`📍 You are at: ${locationName}`, lat, lon);
         })
         .catch(() => {
-            document.getElementById("status").innerText = `Latitude: ${lat}, Longitude: ${lon}`;
+            updateStatus(`Latitude: ${lat}, Longitude: ${lon}`, lat, lon);
         });
 }
 
+function fetchLocationName(lat, lon) {
+    const apiKey = 'YOUR_GOOGLE_MAPS_API_KEY'; // Consider fetching this from an environment variable or secure endpoint
+    const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lon}&key=${apiKey}`;
+
+    return fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === "OK") {
+                return data.results[0].formatted_address;
+            } else {
+                throw new Error('Geocoding failed');
+            }
+        });
+}
+
+function updateStatus(message, lat, lon) {
+    const statusElement = document.getElementById("status");
+    statusElement.innerText = message;
+
+    // Display OpenStreetMap
+    const map = L.map('map').setView([lat, lon], 13);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    L.marker([lat, lon]).addTo(map)
+        .bindPopup(`📍 You are here!`)
+        .openPopup();
+}
+
 function showError(error) {
+    const statusElement = document.getElementById("status");
+    let message;
     switch (error.code) {
         case error.PERMISSION_DENIED:
-            document.getElementById("status").innerText = "❌ Permission denied. Please allow location access.";
+            message = "❌ Permission denied. Please allow location access.";
             break;
         case error.POSITION_UNAVAILABLE:
-            document.getElementById("status").innerText = "⚠️ Location information unavailable.";
+            message = "⚠️ Location information unavailable.";
             break;
         case error.TIMEOUT:
-            document.getElementById("status").innerText = "⏳ Request timed out.";
+            message = "⏳ Request timed out.";
             break;
         default:
-            document.getElementById("status").innerText = "❓ An unknown error occurred.";
+            message = "❓ An unknown error occurred.";
             break;
     }
+    statusElement.innerText = message;
 }
