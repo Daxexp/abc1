@@ -1,14 +1,42 @@
-const channels = {
-    "tv-derana": "https://edge2-moblive.yuppcdn.net/transhd2/smil:detv04.smil/playlist.m3u8?wmsAuthSign=c2VydmVyX3RpbWU9MDMvMTAvMjAyNCAxMToyMzozMCBBTSZoYXNoX3ZhbHVlPXN0aU85Umg2R1ZCMzZ0Y0lkVStmZ0E9PSZ2YWxpZG1pbnV0ZXM9NSZpZD15dXBwdHZvdHRfNV8yMDE3NzBfYTA0NmIxNGUtYzBiNS1mOTAzLTgzZjUtZDE3YzY0MmE1YTFjX0xLXzE3NS4xNTcuMTM2LjkwX3NsdF8xX2NoYW5uZWxfNF8tMSZzdHJtX2xlbj0yNQ==",
-    "sirasa-tv": "https://edge3-moblive.yuppcdn.net/transsd/smil:sirtv09.smil/playlist.m3u8?wmsAuthSign=c2VydmVyX3RpbWU9MDMvMTAvMjAyNCAxMToxMzo1MyBBTSZoYXNoX3ZhbHVlPWxTdVZPMHpONjVtTHkzTS9MWjkvUEE9PSZ2YWxpZG1pbnV0ZXM9NSZpZD15dXBwdHZvdHRfNV8yMDE3NzBfYTA0NmIxNGUtYzBiNS1mOTAzLTgzZjUtZDE3YzY0MmE1YTFjX0xLXzE3NS4xNTcuMTM2LjkwX3NsdF8xX2NoYW5uZWxfOV8tMSZzdHJtX2xlbj0yNQ==",
-    "hiru-tv": "https://edge2-moblive.yuppcdn.net/transhd2/smil:hitv17.smil/playlist.m3u8?wmsAuthSign=c2VydmVyX3RpbWU9MDMvMTAvMjAyNCAxMToxNzo0MiBBTSZoYXNoX3ZhbHVlPWF2aHYvSjRsOWFxYTg0Tkt2RENnM3c9PSZ2YWxpZG1pbnV0ZXM9NSZpZD15dXBwdHZvdHRfNV8yMDE3NzBfYTA0NmIxNGUtYzBiNS1mOTAzLTgzZjUtZDE3YzY0MmE1YTFjX0xLXzE3NS4xNTcuMTM2LjkwX3NsdF8xX2NoYW5uZWxfMTdfLTEmc3RybV9sZW49MjU=",
-};
+function getLocation() {
+    if (!navigator.geolocation) {
+        document.getElementById("status").innerText = "Geolocation is not supported by your browser.";
+        return;
+    }
 
-function playChannel(channelKey) {
-    const channelName = document.querySelector(`.channel[data-key="${channelKey}"] h2`).textContent;
-    window.location.href = `player.html?channel=${encodeURIComponent(channelName)}&id=${encodeURIComponent(channelKey)}`;
+    document.getElementById("status").innerText = "Getting location...";
+
+    navigator.geolocation.getCurrentPosition(showPosition, showError);
 }
 
-function resolveStreamURL(channelKey) {
-    return channels[channelKey];
+function showPosition(position) {
+    const lat = position.coords.latitude;
+    const lon = position.coords.longitude;
+    document.getElementById("status").innerText = `Latitude: ${lat}, Longitude: ${lon}`;
+
+    const map = L.map('map').setView([lat, lon], 13);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    L.marker([lat, lon]).addTo(map)
+        .bindPopup("You are here!")
+        .openPopup();
+}
+
+function showError(error) {
+    switch (error.code) {
+        case error.PERMISSION_DENIED:
+            document.getElementById("status").innerText = "Permission denied. Please allow location access.";
+            break;
+        case error.POSITION_UNAVAILABLE:
+            document.getElementById("status").innerText = "Location information unavailable.";
+            break;
+        case error.TIMEOUT:
+            document.getElementById("status").innerText = "Request timed out.";
+            break;
+        default:
+            document.getElementById("status").innerText = "An unknown error occurred.";
+            break;
+    }
 }
