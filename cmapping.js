@@ -22,18 +22,6 @@ function showPosition(position) {
     L.marker([lat, lon]).addTo(map)
         .bindPopup("You are here!")
         .openPopup();
-
-    // Send location data to the server
-    fetch('https://your-deployed-server-url/location', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ latitude: lat, longitude: lon })
-    })
-    .then(response => response.text())
-    .then(data => console.log(data))
-    .catch(error => console.error('Error:', error));
 }
 
 function showError(error) {
