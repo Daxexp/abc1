@@ -13,21 +13,25 @@ function showPosition(position) {
     const lat = position.coords.latitude;
     const lon = position.coords.longitude;
 
-    // Reverse Geocoding API (OpenStreetMap Nominatim)
-    fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`)
+    // Use Google Maps Geocoding API for accurate location name
+    fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lon}&key=YOUR_GOOGLE_MAPS_API_KEY`)
         .then(response => response.json())
         .then(data => {
-            const locationName = data.display_name;
-            document.getElementById("status").innerText = `📍 You are at: ${locationName}`;
+            if (data.status === "OK") {
+                const locationName = data.results[0].formatted_address;
+                document.getElementById("status").innerText = `📍 You are at: ${locationName}`;
+            } else {
+                document.getElementById("status").innerText = `Latitude: ${lat}, Longitude: ${lon}`;
+            }
 
-            // Display map
+            // Display OpenStreetMap
             const map = L.map('map').setView([lat, lon], 13);
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; OpenStreetMap contributors'
             }).addTo(map);
 
             L.marker([lat, lon]).addTo(map)
-                .bindPopup(`📍 ${locationName}`)
+                .bindPopup(`📍 You are here!`)
                 .openPopup();
         })
         .catch(() => {
