@@ -1,48 +1,39 @@
-let map;
-let marker;
-
-function startTracking() {
+function getLocation() {
     if (!navigator.geolocation) {
         document.getElementById("status").innerText = "Geolocation is not supported by your browser.";
         return;
     }
 
-    document.getElementById("status").innerText = "Tracking live location...";
+    document.getElementById("status").innerText = "Getting location...";
 
-    navigator.geolocation.watchPosition(updatePosition, showError, {
-        enableHighAccuracy: true,
-        maximumAge: 0
-    });
+    navigator.geolocation.getCurrentPosition(showPosition, showError);
 }
 
-function updatePosition(position) {
+function showPosition(position) {
     const lat = position.coords.latitude;
     const lon = position.coords.longitude;
+    document.getElementById("status").innerText = `Latitude: ${lat}, Longitude: ${lon}`;
 
-    if (!map) {
-        map = L.map('map').setView([lat, lon], 13);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; OpenStreetMap contributors'
-        }).addTo(map);
+    const map = L.map('map').setView([lat, lon], 13);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
 
-        marker = L.marker([lat, lon]).addTo(map)
-            .bindPopup("Fetching location...").openPopup();
-    } else {
-        map.setView([lat, lon], 13);
-        marker.setLatLng([lat, lon]);
-    }
+    L.marker([lat, lon]).addTo(map)
+        .bindPopup("You are here!")
+        .openPopup();
 
-    // Get location name
-    fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`)
-        .then(response => response.json())
-        .then(data => {
-            const locationName = data.display_name || "Unknown location";
-            document.getElementById("status").innerText = `You are in: ${locationName}`;
-            marker.bindPopup(locationName).openPopup();
-        })
-        .catch(() => {
-            document.getElementById("status").innerText = `Latitude: ${lat}, Longitude: ${lon}`;
-        });
+    // Send location data to the server
+    fetch('https://your-deployed-server-url/location', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ latitude: lat, longitude: lon })
+    })
+    .then(response => response.text())
+    .then(data => console.log(data))
+    .catch(error => console.error('Error:', error));
 }
 
 function showError(error) {
